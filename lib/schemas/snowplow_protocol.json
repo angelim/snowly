@@ -260,8 +260,6 @@
     "ti_quantity": { "event": "ti" },
     "ti_price": { "event": "ti" },
     "unstruct_event": { "event": "ue"},
-    "page_url": { "platform": "web" },
-    "page_urlscheme": { "platform": "web" },
-    "page_urlhost": { "platform": "web" }
+    "page_url": { "platform": "web" }
   }
 }
