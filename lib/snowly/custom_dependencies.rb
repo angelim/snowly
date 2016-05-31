@@ -29,12 +29,22 @@ class CustomDependenciesAttribute < JSON::Schema::Attribute
   end
 end
 
-class ExtendedSchema < JSON::Schema::Validator
+class RootExtendedSchema < JSON::Schema::Validator
   def initialize
     super
     extend_schema_definition("http://json-schema.org/draft-04/schema#")
     @attributes["custom_dependencies"] = CustomDependenciesAttribute
     @uri = URI.parse("http://json-schema.org/draft-04/schema")
+  end
+  JSON::Validator.register_validator(self.new)
+end
+
+class DescExtendedSchema < JSON::Schema::Validator
+  def initialize
+    super
+    extend_schema_definition("http://iglucentral.com/schemas/com.snowplowanalytics.self-desc/schema/jsonschema/1-0-0#")
+    @attributes["custom_dependencies"] = CustomDependenciesAttribute
+    @uri = URI.parse("http://iglucentral.com/schemas/com.snowplowanalytics.self-desc/schema/jsonschema/1-0-0#")
   end
   JSON::Validator.register_validator(self.new)
 end

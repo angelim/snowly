@@ -80,8 +80,7 @@ describe Snowly::Validator do
     {
       schema: 'iglu:context/schema/json/1-0-1',
       data: {
-        street: 'name',
-        number: 10
+        street: 'street'
       }
     }
   end
@@ -96,7 +95,7 @@ describe Snowly::Validator do
   let(:invalid_co_multiple) do
     {
       schema: 'iglu:com.snowplowanalytics.snowplow/contexts/jsonschema/1-0-0',
-      data: [ valid_co_data.deep_merge(data: {age: 1000}), valid_co_data_1]
+      data: [ valid_co_data, valid_co_data_1.deep_merge(data: {street: 'home'}) ]
     }.to_json
   end
   

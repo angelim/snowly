@@ -20,6 +20,8 @@
       "maximum": 100
     }
   },
-  "required": ["street", "number"],
+  "custom_dependencies": {
+    "number": { "street": "home" }
+  },
   "additionalProperties": false
 }
