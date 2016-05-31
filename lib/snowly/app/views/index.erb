@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Snowly - Snowplow Request Validator</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+</head>
+<body>
+  <div class="container">
+    <div class="header clearfix">
+      <nav>
+        <ul class="nav nav-pills pull-right">
+          <li role="presentation"><a href="https://github.com/angelim/snowly">Github</a></li>
+          <li role="presentation"><a href="https://github.com/snowplow/snowplow">Snowplow</a></li>
+        </ul>
+      </nav>
+      <h3 class="text-muted">Snowly - Snowplow Request Validator</h3>
+    </div>
+
+    <div class="jumbotron">
+      <p class="lead">Test your snowplow implementation locally!</p>
+      <p><strong>Snowly</strong> is a minimal collector implementation intended to validate your event tracking requests before emitting them to cloudfront or a closure collector.</p>
+      <p>When <strong>Snowly</strong> finds something wrong, it renders the parsed request along with its errors.</p>
+      <p>If everything is ok, Snowly delivers the default Snowplow pixel, unless you're using the debug mode.</p>
+      <p>Point your collector URL to <code><%= url %>i</code> and have fun!</p>
+      <p>
+        <a class="btn btn-lg btn-success" href="/i?&e=pv&page=Root%20README&url=http%3A%2F%2Fgithub.com%2Fsnowplow%2Fsnowplow&aid=snowplow&p=web&tv=no-js-0.1.0&ua=firefox&&eid=u2i3&debug=true" role="button">See it working!</a>
+        <a class="btn btn-lg btn-warning" href="/i?&e=pv&page=Root%20README&url=http%3A%2F%2Fgithub.com%2Fsnowplow%2Fsnowplow&aid=snowplow&p=i&tv=no-js-0.1.0&debug=true" role="button">Event with errors!</a>
+      </p>
+      <% unless Snowly.local_iglu_resolver_path %>
+      <div class="alert alert-danger" role="alert">The Local Iglu Resolver Path is missing.</div>
+      <% end %>
+    </div>
+
+    <div class="row marketing">
+      <div class="col-lg-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">Current Configuration</div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Environment Variable</th>
+                <th>Value</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>SNOWLY_DEBUG_MODE</td>
+                <td><%= Snowly.debug_mode %></td>
+                <td>Renders parsed request instead of a pixel. Defaults to false</td>
+              </tr>
+              <tr>
+                <td>LOCAL_IGLU_RESOLVER_PATH</td>
+                <td><%= Snowly.local_iglu_resolver_path %></td>
+                <td>Local path for contexts and unstructured event schemas.</td>
+              </tr>
+            </tbody>
+
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="row marketing">
+      <div class="col-lg-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">Resolved Schemas</div>
+          <div class="panel-body">
+            <% if @resolved_schemas and not @resolved_schemas == [] %>
+              <ul>
+                <% @resolved_schemas.each do |r| %>
+                  <li><%= r %></li>
+                <% end %>
+              </ul>
+            <% else %>
+              <p>No resolved schemas</p>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <h4>Local Iglu Resolver</h4>
+        <p>
+        Snowly must be able to find your custom context and unstructured event schemas.
+        Just like the Resolver you may have already configured for the official ETL tools, Snowly needs a
+        local path to find your custom schemas. You can store them under any path(eg: ~/schemas)
+        Inside that folder you must create a resolver compatible structure:
+        <code>~/schemas/com.yoursite/schema/my_context/1-0-0</code><br>
+        <code>~/schemas/com.yoursite/schema/my_event/1-0-0</code><br>
+        1-0-0 is the file holding the schema.
+        </p>
+        <p>
+          When you emmit events, use the schema path from the <code>Resolver path</code><br/>
+          <code>{ schema: 'iglu:com.yoursite/schema/my_context/1-0-0', data: !some_schema_data! }</code>
+        </p>
+        <p>
+          Be sure to give your schemas an <a href="http://spacetelescope.github.io/understanding-json-schema/structuring.html#the-id-property">id</a>, so Snowly can output more helpful validation error messages.
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
