@@ -43,7 +43,7 @@ module Snowly
       "ds" => { field: "doc_width_x_height", type: "string" },
       "vp" => { field: "browser_viewport_width_x_height", type: "string" },
       "eid" => { field: "event_id", type: "string" },
-      "co" => { field: "contexts", type: "string" },
+      "co" => { field: "contexts", type: "json" },
       "cx" => { field: "contexts", type: "base64" },
       "ev_ca" => { field: "se_category", type: "string" },
       "ev_ac" => { field: "se_action", type: "string" },
@@ -55,7 +55,7 @@ module Snowly
       "se_la" => { field: "se_label", type: "string" },
       "se_pr" => { field: "se_property", type: "string" },
       "se_va" => { field: "se_value", type: "number" },
-      "ue_pr" => { field: "unstruct_event", type: "string" },
+      "ue_pr" => { field: "unstruct_event", type: "json" },
       "ue_px" => { field: "unstruct_event", type: "base64" },
       "tr_id" => { field: "tr_orderid", type: "string" },
       "tr_af" => { field: "tr_affiliation", type: "string" },
@@ -92,6 +92,7 @@ module Snowly
     def convert(value, type)
       begin
         case type
+        when 'json' then JSON.parse(value)
         when 'base64' then JSON.parse(Base64.urlsafe_decode64(value))
         when 'integer' then Integer(value)
         when 'number' then Float(value)
