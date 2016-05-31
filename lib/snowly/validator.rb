@@ -1,6 +1,6 @@
 # Performs the validation for the root attributes and associated contexts and unstructured events.
 require 'snowly/request'
-require 'snowly/custom_dependencies'
+require 'snowly/extensions/custom_dependencies'
 module Snowly
   class Validator
     attr_reader :request, :errors
