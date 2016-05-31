@@ -1,3 +1,5 @@
+# Register a validator for the self-describing schema.
+# This is required to allow extended validations being attached to it.
 require 'json-schema/validators/draft4'
 module JSON
   class Schema

@@ -1,3 +1,16 @@
+# Extended validation to require custom dependencies
+# This validation allows the schema designer to define requirements based on other attribute content.
+# @example Require apartment number if address type is `apartment`
+# {
+#   'address': { 'type': string' },
+#   'adress_type': { 'type': 'string', 'enum': ['house', 'apartment']  },
+#   'apartment_number': { 'type': 'number'},
+#   'custom_dependencies': {
+#     apartment_number: { 'address_type': 'apartment' }
+#   }
+# }
+# In this example if the address type is 'house', apartment_number if not required.
+# It only becomes a requirement if address type is set to 'apartment'.
 require 'json-schema/attribute'
 
 class CustomDependenciesAttribute < JSON::Schema::Attribute
@@ -29,6 +42,8 @@ class CustomDependenciesAttribute < JSON::Schema::Attribute
   end
 end
 
+# Registers custom dependencies for Draft-4. This used when evaluating the protocol schema
+# snowly/schemas/snowplow_protocol.json
 class RootExtendedSchema < JSON::Schema::Validator
   def initialize
     super
@@ -39,6 +54,7 @@ class RootExtendedSchema < JSON::Schema::Validator
   JSON::Validator.register_validator(self.new)
 end
 
+# Registers custom dependencies for Snowplot Self-Describing schema. Contexts and Unstructure events derive from it.
 class DescExtendedSchema < JSON::Schema::Validator
   def initialize
     super

@@ -1,3 +1,4 @@
+# Performs the validation for the root attributes and associated contexts and unstructured events.
 require 'snowly/request'
 require 'snowly/custom_dependencies'
 module Snowly
@@ -9,22 +10,29 @@ module Snowly
       @errors = []
     end
 
+    # Loads the protocol schema created to describe snowplow events table attributes
+    # @return [Hash] parsed schema
     def protocol_schema
       @protocol_schema ||= JSON.parse File.read("lib/schemas/snowplow_protocol.json")
     end
 
+    # @return [Hash] all contexts content and schema definitions
     def associated_contexts
       load_contexts request.as_hash['contexts']
     end
 
+    # @return [Hash] all unstructured events content and schema definitions
     def associated_unstruct_event
       load_unstruct_event request.as_hash['unstruct_event']
     end
 
+    # @return [Array<Hash>] all associated content
     def associated_elements
       (Array(associated_contexts) + Array(associated_unstruct_event)).compact
     end
 
+    # Performs initial validation for associated contexts and loads their contents and definitions.
+    # @return [Array<Hash>]
     def load_contexts(hash)
       return unless hash
       response = []
@@ -41,6 +49,8 @@ module Snowly
       response
     end
 
+    # Performs initial validation for associated unstructured events and loads their contents and definitions.
+    # @return [Array<Hash>]
     def load_unstruct_event(hash)
       return unless hash
       response = []
@@ -54,6 +64,7 @@ module Snowly
       response
     end
 
+    # Validates associated contexts and unstructured events
     def validate_associated
       return unless associated_elements
        associated_elements.each do |schema|
@@ -62,15 +73,19 @@ module Snowly
       end
     end
 
+    # Validates root attributes for the events table
     def validate_root
       this_error = JSON::Validator.fully_validate protocol_schema, request.as_hash
       @errors += this_error if this_error.count > 0
     end
 
+    # If request is valid
+    # @return [true, false] if valid
     def valid?
       @errors == []
     end
 
+    # Entry point for validation.
     def validate
       validate_root
       validate_associated

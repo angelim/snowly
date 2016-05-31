@@ -1,3 +1,4 @@
+# Maps query string parameters to column names to provide more helpful references on validations.
 module Snowly
   module Transformer
     module_function
@@ -79,6 +80,10 @@ module Snowly
       "tr_cu" => { field: "tr_currency", type: "string" },
       "ti_cu" => { field: "ti_currency", type: "integer" }
     }
+
+    # Transforms the request params into column names
+    # @param parsed_query [Hash] hash using parameter names for keys
+    # @return [Hash] hash using column names for keys
     def transform(parsed_query)
       parsed_query.inject({}) do |all, (key, value)|
         if node = MAP[key]
@@ -89,6 +94,10 @@ module Snowly
       end
     end
 
+    # Tries to cast or parse each value so they can be properly validated by json-schema
+    # If the casting fails, leaves the value as string and it will be caught by the valication
+    # @param value [String]
+    # @param type [String] the intended param type
     def convert(value, type)
       begin
         case type
