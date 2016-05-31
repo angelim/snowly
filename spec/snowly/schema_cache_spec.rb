@@ -10,7 +10,7 @@ describe Snowly::SchemaCache do
   context 'with external schema' do
     let(:url)           { "http://iglucentral.com/schemas/com.snowplowanalytics.snowplow/contexts/jsonschema/1-0-0" }
     let(:location)      { 'iglu:com.snowplowanalytics.snowplow/contexts/jsonschema/1-0-0'}
-    let(:file_content)  { File.read(File.expand_path('../../fixtures/snowplow_context.json', __FILE__)) }
+    let(:file_content) { File.read(File.expand_path('../../fixtures/context/schema/json/1-0-0', __FILE__)) }
     context 'when already loaded' do
       before do
         stub_request(:get, url).to_return(body: file_content, status: 200)
@@ -38,8 +38,8 @@ describe Snowly::SchemaCache do
   end
 
   context 'with local schema' do
-    let(:location) { 'iglu:test_context.json'}
-    let(:file_content) { File.read(File.expand_path('../../fixtures/test_context.json', __FILE__)) }
+    let(:location) { 'iglu:context/schema/json/1-0-0'}
+    let(:file_content) { File.read(File.expand_path('../../fixtures/context/schema/json/1-0-0', __FILE__)) }
     context 'when already loaded' do
       before { Snowly::SchemaCache.instance[location] }
       it 'does not save on cache' do

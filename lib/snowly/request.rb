@@ -11,7 +11,7 @@ module Snowly
     end
 
     def as_hash
-      @hash ||= Transformer.transform(parsed_query).with_indifferent_access
+      @hash ||= Transformer.transform(parsed_query)
     end
 
     def parsed_query

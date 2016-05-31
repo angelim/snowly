@@ -1,0 +1,47 @@
+{
+  "$schema": "http://iglucentral.com/schemas/com.snowplowanalytics.self-desc/schema/jsonschema/1-0-0#",
+  "id": "unstruct_event",
+  "description": "Unstructured Event Test",
+  "self": {
+    "vendor": "snowly",
+    "name": "test_ue",
+    "format": "jsonschema",
+    "version": "1-0-0"
+  },
+  "type": "object",
+  "properties": {
+    "category": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "elapsed_time": {
+      "type": "integer",
+      "maximum": 2147483647
+    },
+    "object_id": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "string_property_name": {
+      "type": "string",
+      "maxLength": 20
+    },
+    "string_property_value": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "number_property_name": {
+      "type": "string",
+      "maxLength": 20
+    },
+    "number_property_value": {
+      "type": "number"
+    }
+  },
+  "additionalProperties": false
+}
+

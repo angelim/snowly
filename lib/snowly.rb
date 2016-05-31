@@ -1,3 +1,5 @@
+require 'json-schema'
+require 'snowly/validators/self_desc'
 require "pry"
 require "snowly/version"
 require 'json'
@@ -6,6 +8,7 @@ require 'snowly/validator'
 require 'snowly/schema_cache'
 require 'active_support'
 
+
 module Snowly
   mattr_accessor :local_iglu_resolver_path
   @@local_iglu_resolver_path = ENV['LOCAL_IGLU_RESOLVER_PATH']
@@ -13,3 +16,4 @@ module Snowly
     yield self
   end
 end
+
