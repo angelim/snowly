@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 # /snowly
-require 'rubygems'
-require 'bundler'
-Bundler.setup
+require "bundler/setup"
 require 'snowly'
 require 'snowly/app/collector'
 require 'vegas'

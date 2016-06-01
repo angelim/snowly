@@ -1,6 +1,7 @@
 # Performs the validation for the root attributes and associated contexts and unstructured events.
 require 'snowly/request'
 require 'snowly/extensions/custom_dependencies'
+
 module Snowly
   class Validator
     attr_reader :request, :errors
@@ -13,7 +14,7 @@ module Snowly
     # Loads the protocol schema created to describe snowplow events table attributes
     # @return [Hash] parsed schema
     def protocol_schema
-      @protocol_schema ||= JSON.parse File.read("lib/schemas/snowplow_protocol.json")
+      @protocol_schema ||= JSON.parse File.read(File.expand_path("../../schemas/snowplow_protocol.json",__FILE__))
     end
 
     # @return [Hash] all contexts content and schema definitions
