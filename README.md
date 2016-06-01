@@ -88,6 +88,9 @@ When Snowly finds something wrong, it renders the parsed request along with its 
 
 If everything is ok, Snowly delivers the default Snowplow pixel, unless you're using the debug mode. In debug mode it always renders the parsed contents of your requests.
 
+If you can't investigate the request's response, you can start Snowly in the foreground and in Debug Mode to output the response to STDOUT.
+`snowly -d -F`
+
 Example: 
 `http://0.0.0.0:5678/i?&e=pv&page=Root%20README&url=http%3A%2F%2Fgithub.com%2Fsnowplow%2Fsnowplow&aid=snowplow&p=i&tv=no-js-0.1.0`
 ```json
