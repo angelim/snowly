@@ -6,7 +6,7 @@ Snowly is a minimal [Collector](https://github.com/snowplow/snowplow/wiki/Settin
 
 ### Motivation
 
-Snowplow has an excellent toolset, but the first implementation stages can be hard. To run Snowplow properly you have to set up a lot of external dependencies like AWS permissions, Cloudfront distributions and EMR jobs. If you're tweaking the snowplow model to fit your needs or using trackers that don't enforce every requirement, you'll find yourself waiting for the ETL jobs to run in order to validate every implementation changes.
+Snowplow has an excellent toolset, but the first implementation stages can be hard. To run Snowplow properly you have to set up a lot of external dependencies like AWS permissions, Cloudfront distributions and EMR jobs. If you're tweaking the snowplow model to fit your needs or using trackers that don't enforce every requirement, you'll find yourself waiting for the ETL jobs to run in order to validate every implementation change. __[update] This has changed a quite a bit with Snowplow Mini's release. It's a lot easier to get started, but Snowly is still valuable as a first step and debug tool.__
 
 ### Who will get the most from Snowly
 
@@ -82,6 +82,32 @@ Other options:
         --log-file LOG_FILE  set the path to the log file (default: app_dir/collector.log)
         --url-file URL_FILE  set the path to the URL file (default: app_dir/collector.url)
 
+### Output
+
+When Snowly finds something wrong, it renders the parsed request along with its errors.
+
+If everything is ok, Snowly delivers the default Snowplow pixel, unless you're using the debug mode. In debug mode it always renders the parsed contents of your requests.
+
+Example: 
+`http://0.0.0.0:5678/i?&e=pv&page=Root%20README&url=http%3A%2F%2Fgithub.com%2Fsnowplow%2Fsnowplow&aid=snowplow&p=i&tv=no-js-0.1.0`
+```json
+{
+  "errors": [
+    "The property '#/platform' value \"i\" did not match one of the following values: web, mob, pc, srv, tv, cnsl, iot in schema snowplow_protocol.json",
+    "The property '#/' did not contain a required property of 'event_id' in schema snowplow_protocol.json",
+    "The property '#/' did not contain a required property of 'useragent' in schema snowplow_protocol.json"
+  ],
+  "content": {
+    "event": "pv",
+    "page_title": "Root README",
+    "page_url": "http://github.com/snowplow/snowplow",
+    "app_id": "snowplow",
+    "platform": "i",
+    "v_tracker": "no-js-0.1.0"
+  }
+}
+```
+
 ## JSON Schemas
 
 JSON Schema is a powerful tool for validating the structure of JSON data. I recommend reading this excellent [Guide](http://spacetelescope.github.io/understanding-json-schema/) from Michael Droettboom to understand all of its capabilities, but you can start with the examples bellow.
@@ -153,7 +179,7 @@ __Note that this is not valid json because of the comments.__
 
 ### Extending Snowplow's Protocol
 
-Although the Snowplow's protocol isn't originally defined in a JSON schema, it doesn't hurt to do so and take advantage of all its perks. It's also here for the sake of consistency, right?
+Although the Snowplow's protocol isn't originally defined as a JSON schema, it doesn't hurt to do so and take advantage of all its perks. It's also here for the sake of consistency, right?
 
 By expressing the protocol in a JSON schema you can extend it to fit your particular needs and enforce domain rules that otherwise wouldn't be available. [Take a look](https://github.com/angelim/snowly/blob/master/lib/schemas/snowplow_protocol.json) at the default schema, derived from the rules specified on the [canonical model](https://github.com/snowplow/snowplow/wiki/canonical-event-model).
 
