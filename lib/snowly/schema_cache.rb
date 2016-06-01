@@ -33,6 +33,10 @@ module Snowly
       location['iglu:com.snowplowanalytics.snowplow']
     end
 
+    def external?(location)
+      location.match(/^(http|https):\/\//)
+    end
+
     # Translate an iglu address to an actual local or remote location
     # @param location [String]
     # @param resolver [String] local or remote path to look for the schema
@@ -41,16 +45,20 @@ module Snowly
       location.sub(/^iglu\:/, resolver)
     end
 
+    def resolved_path(location)
+      if from_snowplow?(location)
+        resolve(location, SNOWPLOW_IGLU_RESOLVER)
+      else
+        resolve(location, Snowly.development_iglu_resolver_path)
+      end
+    end
+
     # Caches the schema content under its original location name
     # @param location [String]
     # @return [String] schema content
     def save_in_cache(location)
-      content = if from_snowplow?(location)
-        uri = URI(resolve(location, SNOWPLOW_IGLU_RESOLVER))
-        Net::HTTP.get(uri)
-      else
-        File.read(resolve(location, Snowly.development_iglu_resolver_path))
-      end
+      full_path = resolved_path(location)
+      content = external?(full_path) ? Net::HTTP.get(URI(full_path)) : File.read(full_path)
       @@schema_cache[location] = content
     end
 

@@ -8,7 +8,7 @@ describe Snowly::SchemaCache do
   end
   let(:file_content) { File.read(File.expand_path('../../fixtures/snowly/context_test_0/jsonschema/1-0-0', __FILE__)) }
   
-  context 'with external schema' do
+  context 'with snowplow schema' do
     let(:url)           { "http://iglucentral.com/schemas/com.snowplowanalytics.snowplow/contexts/jsonschema/1-0-0" }
     let(:location)      { 'iglu:com.snowplowanalytics.snowplow/contexts/jsonschema/1-0-0'}
     context 'when already loaded' do
@@ -37,7 +37,7 @@ describe Snowly::SchemaCache do
     end
   end
 
-  context 'with local schema' do
+  context 'with development schema' do
     let(:location) { 'iglu:snowly/context_test_0/jsonschema/1-0-0'}
     context 'when already loaded' do
       before { Snowly::SchemaCache.instance[location] }
@@ -56,6 +56,15 @@ describe Snowly::SchemaCache do
       end
       it 'loads and returns schema' do
         expect(Snowly::SchemaCache.instance[location]).to eq file_content
+      end
+    end
+    context 'when using external resolver', focus: true do
+      before { Snowly.development_iglu_resolver_path = "http://snowly"}
+      let(:url) { "http://snowly/context_test_0/jsonschema/1-0-0" }
+      it 'saves on cache' do
+        stub_request(:get, url).to_return(body: file_content, status: 200)
+        expect(Snowly::SchemaCache.instance).to receive(:save_in_cache).with(location)
+        Snowly::SchemaCache.instance[location]
       end
     end
   end
