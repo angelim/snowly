@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Snowly::SchemaCache do
-  before { Snowly.local_iglu_resolver_path = File.expand_path("../../fixtures", __FILE__)+"/" }
+  before { Snowly.development_iglu_resolver_path = File.expand_path("../../fixtures", __FILE__)+"/" }
   before { Snowly::SchemaCache.instance.reset_cache }
   it 'is singleton' do
     expect(Snowly::SchemaCache.instance).to eq Snowly::SchemaCache.instance    

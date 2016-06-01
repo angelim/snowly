@@ -27,7 +27,7 @@
         <a class="btn btn-lg btn-success" href="/i?&e=pv&page=Root%20README&url=http%3A%2F%2Fgithub.com%2Fsnowplow%2Fsnowplow&aid=snowplow&p=web&tv=no-js-0.1.0&ua=firefox&&eid=u2i3&debug=true" role="button">See it working!</a>
         <a class="btn btn-lg btn-warning" href="/i?&e=pv&page=Root%20README&url=http%3A%2F%2Fgithub.com%2Fsnowplow%2Fsnowplow&aid=snowplow&p=i&tv=no-js-0.1.0&debug=true" role="button">Event with errors!</a>
       </p>
-      <% unless Snowly.local_iglu_resolver_path %>
+      <% unless Snowly.development_iglu_resolver_path %>
       <div class="alert alert-danger" role="alert">The Local Iglu Resolver Path is missing.</div>
       <% end %>
       <p>Use <code>snowly -K</code> to stop the collector.</p>
@@ -52,8 +52,8 @@
                 <td>Renders parsed request instead of a pixel. Defaults to false</td>
               </tr>
               <tr>
-                <td>LOCAL_IGLU_RESOLVER_PATH</td>
-                <td><%= Snowly.local_iglu_resolver_path %></td>
+                <td>DEVELOPMENT_IGLU_RESOLVER_PATH</td>
+                <td><%= Snowly.development_iglu_resolver_path %></td>
                 <td>Local path for contexts and unstructured event schemas.</td>
               </tr>
             </tbody>

@@ -9,9 +9,9 @@ require 'snowly/validator'
 require 'snowly/schema_cache'
 
 module Snowly
-  mattr_accessor :local_iglu_resolver_path, :debug_mode, :logger
+  mattr_accessor :development_iglu_resolver_path, :debug_mode, :logger
   
-  @@local_iglu_resolver_path = ENV['LOCAL_IGLU_RESOLVER_PATH']
+  @@development_iglu_resolver_path = ENV['DEVELOPMENT_IGLU_RESOLVER_PATH']
   @@debug_mode = false
   @@logger = Logger.new(STDOUT)
 

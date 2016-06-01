@@ -49,7 +49,7 @@ module Snowly
         uri = URI(resolve(location, SNOWPLOW_IGLU_RESOLVER))
         Net::HTTP.get(uri)
       else
-        File.read(resolve(location, Snowly.local_iglu_resolver_path))
+        File.read(resolve(location, Snowly.development_iglu_resolver_path))
       end
       @@schema_cache[location] = content
     end

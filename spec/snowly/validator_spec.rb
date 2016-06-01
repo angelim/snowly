@@ -6,7 +6,7 @@ describe Snowly::Validator do
   def to_query(hash)
     Rack::Utils.build_nested_query(hash)
   end
-  before { Snowly.local_iglu_resolver_path = File.expand_path("../../fixtures", __FILE__)+"/" }
+  before { Snowly.development_iglu_resolver_path = File.expand_path("../../fixtures", __FILE__)+"/" }
   before { Snowly::SchemaCache.instance.reset_cache }
 
   let(:context_url)      { "http://iglucentral.com/schemas/com.snowplowanalytics.snowplow/contexts/jsonschema/1-0-0" }

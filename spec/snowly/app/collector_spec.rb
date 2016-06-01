@@ -12,28 +12,28 @@ describe "Collector" do
       expect(last_response.body).to include("/i?")
     end
     context 'when the local resolver path is set' do
-      before { Snowly.local_iglu_resolver_path = 'myresolverpath' }
+      before { Snowly.development_iglu_resolver_path = 'myresolverpath' }
       it 'shows local iglu resolver' do
         get '/'
         expect(last_response.body).to include("myresolverpath")
       end
     end
     context 'when no resolver has been set' do
-      before { Snowly.local_iglu_resolver_path = nil }
+      before { Snowly.development_iglu_resolver_path = nil }
       it 'shows warning' do
         get '/'
         expect(last_response.body).to include("The Local Iglu Resolver Path is missing")
       end
     end
     context 'when no schemas were resolved' do
-      before { Snowly.local_iglu_resolver_path = nil }
+      before { Snowly.development_iglu_resolver_path = nil }
       it 'shows empty resolver message' do
         get '/'
         expect(last_response.body).to include("No resolved schemas")
       end
     end
     context 'when there are resolved schemas' do
-      before { Snowly.local_iglu_resolver_path = File.expand_path("../../../fixtures", __FILE__) }
+      before { Snowly.development_iglu_resolver_path = File.expand_path("../../../fixtures", __FILE__) }
       it 'shows schemas in local resolver' do
         get '/'
         expect(last_response.body).to include("fixtures/snowly/context_test_0/jsonschema/1-0-0")
