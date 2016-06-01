@@ -26,15 +26,19 @@ module Snowly
         validator = Snowly::Validator.new request.query_string
         if validator.validate
           status 200
+          content = { content: validator.request.as_hash }.to_json
+          Snowly.logger.info content
           if params[:debug] || Snowly.debug_mode
-            body({ content: validator.request.as_hash }.to_json)
+            body(content)
           else
             content_type 'image/gif'
             Snowly::App::Collector::GIF
           end
         else
           status 500
-          body ({ errors: validator.errors, content: validator.request.as_hash }.to_json)
+          content = { errors: validator.errors, content: validator.request.as_hash }.to_json
+          Snowly.logger.error content
+          body (content)
         end
       end
     end
