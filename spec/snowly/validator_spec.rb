@@ -68,7 +68,7 @@ describe Snowly::Validator do
 
   let(:valid_co_data) do
     {
-      schema: 'iglu:schemas/contexts/context_test_0/1-0-0',
+      schema: 'iglu:snowly/context_test_0/jsonschema/1-0-0',
       data: {
         name: 'name',
         age: 10
@@ -78,7 +78,7 @@ describe Snowly::Validator do
 
   let(:valid_co_data_1) do
     {
-      schema: 'iglu:schemas/contexts/context_test_1/1-0-0',
+      schema: 'iglu:snowly/context_test_1/jsonschema/1-0-0',
       data: {
         street: 'street'
       }
@@ -109,7 +109,7 @@ describe Snowly::Validator do
   end
   let(:valid_ue_data) do
     {
-      schema: "iglu:schemas/unstruct/event_test/1-0-0",
+      schema: "iglu:snowly/event_test/jsonschema/1-0-0",
       data: {
         category: 'reading',
         name: 'view',

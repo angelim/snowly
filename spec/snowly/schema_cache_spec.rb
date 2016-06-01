@@ -6,7 +6,7 @@ describe Snowly::SchemaCache do
   it 'is singleton' do
     expect(Snowly::SchemaCache.instance).to eq Snowly::SchemaCache.instance    
   end
-  let(:file_content) { File.read(File.expand_path('../../fixtures/schemas/contexts/context_test_0/1-0-0', __FILE__)) }
+  let(:file_content) { File.read(File.expand_path('../../fixtures/snowly/context_test_0/jsonschema/1-0-0', __FILE__)) }
   
   context 'with external schema' do
     let(:url)           { "http://iglucentral.com/schemas/com.snowplowanalytics.snowplow/contexts/jsonschema/1-0-0" }
@@ -38,7 +38,7 @@ describe Snowly::SchemaCache do
   end
 
   context 'with local schema' do
-    let(:location) { 'iglu:schemas/contexts/context_test_0/1-0-0'}
+    let(:location) { 'iglu:snowly/context_test_0/jsonschema/1-0-0'}
     context 'when already loaded' do
       before { Snowly::SchemaCache.instance[location] }
       it 'does not save on cache' do

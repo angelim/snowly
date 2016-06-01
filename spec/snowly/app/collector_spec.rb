@@ -36,7 +36,7 @@ describe "Collector" do
       before { Snowly.local_iglu_resolver_path = File.expand_path("../../../fixtures", __FILE__) }
       it 'shows schemas in local resolver' do
         get '/'
-        expect(last_response.body).to include("fixtures/schemas/contexts/context_test_0/1-0-0")
+        expect(last_response.body).to include("fixtures/snowly/context_test_0/jsonschema/1-0-0")
       end
     end
   end
