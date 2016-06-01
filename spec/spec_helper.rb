@@ -4,6 +4,15 @@ $VERBOSE = nil
 
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'snowly'
+require 'snowly/app/collector'
 require 'snowplow-tracker'
 require 'pry'
 require 'webmock/rspec'
+require 'rack/test'
+
+module RSpecMixin
+  include Rack::Test::Methods
+  def app() Snowly::App::Collector end
+end
+
+RSpec.configure { |c| c.include RSpecMixin }
