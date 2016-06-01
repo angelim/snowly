@@ -4,5 +4,5 @@ require "bundler/setup"
 require 'snowly'
 require 'snowly/app/collector'
 require 'vegas'
-
+Snowly.debug_mode = true if ARGV.index{ |arg| arg == '-d' or arg == '--debug' }
 Vegas::Runner.new(Snowly::App::Collector, 'collector')
