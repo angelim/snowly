@@ -4,17 +4,51 @@ require 'snowly/extensions/custom_dependencies'
 
 module Snowly
   class Validator
-    attr_reader :request, :errors
+    PROTOCOL_FILE_NAME = 'snowplow_protocol.json'
+
+    attr_reader :request, :errors, :protocol_schema
 
     def initialize(query_string)
       @request = Request.new query_string
       @errors = []
+      @protocol_schema = load_protocol_schema
+    end
+
+    # If request is valid
+    # @return [true, false] if valid
+    def valid?
+      @errors == []
+    end
+
+    # Entry point for validation.
+    def validate
+      validate_root
+      validate_associated
+      valid?
+    end
+
+    private
+
+    def find_protocol_schema
+      if resolver && alternative_protocol_schema
+        alternative_protocol_schema
+      else
+        File.expand_path("../../schemas/#{PROTOCOL_FILE_NAME}", __FILE__)
+      end
+    end
+
+    def resolver
+      Snowly.development_iglu_resolver_path
+    end
+
+    def alternative_protocol_schema
+      Dir[File.join(resolver,"/**/*")].select{ |f| File.basename(f) == PROTOCOL_FILE_NAME }[0]
     end
 
     # Loads the protocol schema created to describe snowplow events table attributes
     # @return [Hash] parsed schema
-    def protocol_schema
-      @protocol_schema ||= JSON.parse File.read(File.expand_path("../../schemas/snowplow_protocol.json",__FILE__))
+    def load_protocol_schema
+      JSON.parse File.read(find_protocol_schema)
     end
 
     # @return [Hash] all contexts content and schema definitions
@@ -78,19 +112,6 @@ module Snowly
     def validate_root
       this_error = JSON::Validator.fully_validate protocol_schema, request.as_hash
       @errors += this_error if this_error.count > 0
-    end
-
-    # If request is valid
-    # @return [true, false] if valid
-    def valid?
-      @errors == []
-    end
-
-    # Entry point for validation.
-    def validate
-      validate_root
-      validate_associated
-      valid?
     end
   end
 end

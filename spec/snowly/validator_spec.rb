@@ -148,6 +148,18 @@ describe Snowly::Validator do
       validator.validate
       expect(validator.errors).to eq []
     end
+    context 'and an alternative more restrictive protocol schema' do
+      before do
+        allow_any_instance_of(Snowly::Validator)
+          .to receive(:alternative_protocol_schema)
+          .and_return(File.expand_path('../../fixtures/snowly/alternative_protocol_schema.json', __FILE__))
+      end
+      it 'set errors' do
+        validator.validate
+        puts validator.errors
+        expect(validator.errors.count).to eq 2
+      end
+    end
   end
   context 'with wrong type for attribute' do
     let(:hash) { valid_root.merge(e: 'ad', tid: 'none') }

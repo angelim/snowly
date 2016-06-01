@@ -1,0 +1,265 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "snowplow_protocol.json",
+  "description": "Representation of Snowplow Protocol in JSON Schema format for validation",
+  "type": "object",
+  "properties": {
+    "name_tracker": {
+      "type": "string",
+      "maxLength": 1
+    },
+    "event_vendor": {
+      "type": "string",
+      "maxLength": 1000
+    },
+    "app_id": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "platform": {
+      "type": "string",
+      "enum": ["pc"],
+      "maxLength": 255
+    },
+    "dvce_created_tstamp": {
+      "type": "integer"
+    },
+    "dvce_sent_tstamp": {
+      "type": "integer"
+    },
+    "true_tstamp": {
+      "type": "integer"
+    },
+    "os_timezone": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "event": {
+      "type": "string",
+      "enum": ["se", "ev", "ue", "ad", "tr", "ti", "pv", "pp"]
+    },
+    "txn_id": {
+      "type": "integer"
+    },
+    "event_id": {
+      "type": "string",
+      "maxLength": 36
+    },
+    "v_tracker": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "domain_userid": {
+      "type": "string",
+      "maxLength": 36
+    },
+    "network_userid": {
+      "type": "string",
+      "maxLength": 38
+    },
+    "user_id": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "domain_sessionidx": {
+      "type": "integer"
+    },
+    "domain_sessionid": {
+      "type": "string",
+      "maxLength": 36
+    },
+    "user_ipaddress": {
+      "type": "string",
+      "maxLength": 45
+    },
+    "screen_res_width_x_height": {
+      "type": "string",
+      "pattern": "^[0-9]+x[0-9]+$"
+    },
+    "page_url": {
+      "type": "string",
+      "maxLength": 4096
+    },
+    "useragent": {
+      "type": "string",
+      "maxLength": 1000
+    },
+    "page_title": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "page_referer": {
+      "type": "string",
+      "maxLength": 4096
+    },
+    "user_fingerprint": {
+      "type": "integer"
+    },
+    "br_cookies": {
+      "type": "string",
+      "enum": ["1", "0"]
+    },
+    "br_lang": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "br_features_pdf": {
+      "type": "string",
+      "enum": ["1", "0"]
+    },
+    "br_features_quicktime": {
+      "type": "string",
+      "enum": ["1", "0"]
+    },
+    "br_features_realplayer": {
+      "type": "string",
+      "enum": ["1", "0"]
+    },
+    "br_features_windowsmedia": {
+      "type": "string",
+      "enum": ["1", "0"]
+    },
+    "br_features_director": {
+      "type": "string",
+      "enum": ["1", "0"]
+    },
+    "br_features_flash": {
+      "type": "string",
+      "enum": ["1", "0"]
+    },
+    "br_features_java": {
+      "type": "string",
+      "enum": ["1", "0"]
+    },
+    "br_features_gears": {
+      "type": "string",
+      "enum": ["1", "0"]
+    },
+    "br_features_silverlight": {
+      "type": "string",
+      "enum": ["1", "0"]
+    },
+    "br_colordepth": {
+      "type": "integer"
+    },
+    "doc_width_x_height": {
+      "type": "string",
+      "pattern": "^[0-9]+x[0-9]+$"
+    },
+    "doc_charset": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "browser_viewport_width_x_height": {
+      "type": "string",
+      "pattern": "^[0-9]+x[0-9]+$"
+    },
+    "mac_address": {
+      "type": "string",
+      "maxLength": 36
+    },
+    "pp_xoffset_min": {
+      "type": "integer"
+    },
+    "pp_xoffset_max": {
+      "type": "integer"
+    },
+    "pp_yoffset_min": {
+      "type": "integer"
+    },
+    "pp_yoffset_max": {
+      "type": "integer"
+    },
+    "tr_orderid": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "tr_affiliation": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "tr_total": {
+      "type": "number"
+    },
+    "tr_tax": {
+      "type": "number"
+    },
+    "tr_shipping": {
+      "type": "number"
+    },
+    "tr_city": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "tr_state": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "tr_country": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "tr_currency": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "ti_orderid": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "ti_sku": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "ti_name": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "ti_category": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "ti_price": {
+      "type": "number"
+    },
+    "ti_quantity": {
+      "type": "integer"
+    },
+    "ti_currency": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "se_category": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "se_action": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "se_label": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "se_property": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "se_value": {
+      "type": "number"
+    }
+  },
+  "required": ["app_id", "platform", "event", "event_id", "v_tracker", "useragent"],
+  "custom_dependencies": {
+    "se_category": { "event": "se" },
+    "se_action": {"event": "se" },
+    "tr_orderid": { "event": "tr" },
+    "tr_total": { "event": "tr" },
+    "ti_orderid": { "event": "ti" },
+    "ti_sku": { "event": "ti" },
+    "ti_quantity": { "event": "ti" },
+    "ti_price": { "event": "ti" },
+    "unstruct_event": { "event": "ue"},
+    "page_url": { "platform": "web" }
+  }
+}
