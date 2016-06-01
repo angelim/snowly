@@ -86,13 +86,13 @@
         Just like the Resolver you may have already configured for the official ETL tools, Snowly needs a
         local path to find your custom schemas. You can store them under any path(eg: ~/schemas)
         Inside that folder you must create a resolver compatible structure:
-        <code>~/schemas/com.yoursite/schema/my_context/1-0-0</code><br>
-        <code>~/schemas/com.yoursite/schema/my_event/1-0-0</code><br>
+        <code>~/schemas/com.yoursite/my_context/jsonschema/1-0-0</code><br>
+        <code>~/schemas/com.yoursite/my_event/jsonschema/1-0-0</code><br>
         1-0-0 is the file holding the schema.
         </p>
         <p>
           When you emmit events, use the schema path from the <code>Resolver path</code><br/>
-          <code>{ schema: 'iglu:com.yoursite/schema/my_context/1-0-0', data: !some_schema_data! }</code>
+          <code>{ schema: 'iglu:com.yoursite/my_context/jsonschema/1-0-0', data: !some_schema_data! }</code>
         </p>
         <p>
           Be sure to give your schemas an <a href="http://spacetelescope.github.io/understanding-json-schema/structuring.html#the-id-property">id</a>, so Snowly can output more helpful validation error messages.
