@@ -152,7 +152,7 @@ __Note that this is not valid json because of the comments.__
     },
     "cape_color": {
       "type": "string",
-      "enum": ["red", "blue", "black"] # Xmen Vision is not welcome
+      "enum": ["red", "blue", "black"] # Vision is not welcome
     },
     "is_avenger": {
       "type": "boolean"
