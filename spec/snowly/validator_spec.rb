@@ -99,14 +99,9 @@ describe Snowly::Validator do
     }.to_json
   end
   
-  let(:non_array_cx) { Base64.urlsafe_encode64(not_array_co) }
-  let(:valid_base64_co) { Base64.urlsafe_encode64(valid_co) }
-  let(:invalid_base64_co) do
-    invalid = valid_co.dup
-    invalid[:schema] = 'invalid'
-    contexts = invalid.to_json
-    Base64.encode64(contexts)
-  end
+  let(:non_array_cx) { Base64.strict_encode64(not_array_co) }
+  let(:valid_base64_co) { Base64.strict_encode64(valid_co) }
+  let(:valid_urlsafe_base64_co) { Base64.urlsafe_encode64(valid_co) }
   let(:valid_ue_data) do
     {
       schema: "iglu:snowly/event_test/jsonschema/1-0-0",
@@ -137,7 +132,7 @@ describe Snowly::Validator do
       }.to_json
   end
 
-  let(:valid_base64_ue) { Base64.urlsafe_encode64(valid_ue) }
+  let(:valid_base64_ue) { Base64.strict_encode64(valid_ue) }
 
   context 'with mininum required attributes' do
     let(:hash) { valid_root.merge(e: 'ad') }
@@ -191,6 +186,12 @@ describe Snowly::Validator do
     before { stub_request(:get, context_url).to_return(body: context_content, status: 200) }
     context 'and context is base64 and valid' do
       let(:hash) { valid_root.merge(e: 'ad', cx: valid_base64_co) }
+      it 'returns true' do
+        expect(validator.validate).to be true
+      end
+    end
+    context 'and context is urlsafe_base64 and valid' do
+      let(:hash) { valid_root.merge(e: 'ad', cx: valid_urlsafe_base64_co) }
       it 'returns true' do
         expect(validator.validate).to be true
       end

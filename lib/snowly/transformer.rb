@@ -102,7 +102,7 @@ module Snowly
       begin
         case type
         when 'json' then JSON.parse(value)
-        when 'base64' then JSON.parse(Base64.urlsafe_decode64(value))
+        when 'base64' then JSON.parse(Base64.strict_decode64(value))
         when 'integer' then Integer(value)
         when 'number' then Float(value)
         else

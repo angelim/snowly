@@ -41,8 +41,6 @@ describe Snowly::Transformer do
       "ds" => "ds",
       "vp" => "vp",
       "eid" => "eid",
-      "co" => { name:'co' }.to_json,
-      "cx" => "cx",
       "ev_ca" => "ev_ca",
       "ev_ac" => "ev_ac",
       "ev_la" => "ev_la",
@@ -53,8 +51,6 @@ describe Snowly::Transformer do
       "se_la" => "se_la",
       "se_pr" => "se_pr",
       "se_va" => "se_va",
-      "ue_pr" => { name:'ue_pr' }.to_json,
-      "ue_px" => "ue_px",
       "tr_id" => "tr_id",
       "tr_af" => "tr_af",
       "tr_tt" => "tr_tt",
@@ -77,6 +73,12 @@ describe Snowly::Transformer do
       "tr_cu" => "tr_cu",
       "ti_cu" => "ti_cu"
     }
+  end
+  let(:unencoded) do
+    source.merge('co' => { name:'co' }.to_json, "ue_pr" => { name:'ue_pr' }.to_json)
+  end
+  let(:encoded) do
+    source.merge('cx' => Base64.strict_encode64({ name:'cx' }.to_json), "ue_px" => Base64.strict_encode64({ name:'ue_px' }.to_json))
   end
   let(:translated) do
     {
@@ -119,8 +121,6 @@ describe Snowly::Transformer do
       "doc_width_x_height" => "ds",
       "browser_viewport_width_x_height" => "vp",
       "event_id" => "eid",
-      "contexts" => "co",
-      "contexts" => "cx",
       "se_category" => "ev_ca",
       "se_action" => "ev_ac",
       "se_label" => "ev_la",
@@ -131,8 +131,6 @@ describe Snowly::Transformer do
       "se_label" => "se_la",
       "se_property" => "se_pr",
       "se_value" => "se_va",
-      "unstruct_event" => "ue_pr",
-      "unstruct_event" => "ue_px",
       "tr_orderid" => "tr_id",
       "tr_affiliation" => "tr_af",
       "tr_total" => "tr_tt",
@@ -156,10 +154,28 @@ describe Snowly::Transformer do
       "ti_currency" => "ti_cu"
     }
   end
+  let(:tunencoded) do
+    translated.merge("contexts" => {'name' => 'co'}, "unstruct_event" => {'name' => 'ue_pr'})
+  end
+  let(:tencoded) do
+    translated.merge("contexts" => {'name' => 'cx'}, "unstruct_event" => {'name' => 'ue_px'})
+  end
+
   describe '.translate' do
     it 'maps query string keys to snowplow fields' do
       expect(subject.transform(source)).to eq translated
     end
+    context 'with unencoded context and unstructured event' do
+      it 'maps query string keys to unencoded contexts and ue' do
+        expect(subject.transform(unencoded)).to eq tunencoded
+      end
+    end
+    context 'with encoded context and unstructured event' do
+      it 'maps query string keys to encoded contexts and ue' do
+        expect(subject.transform(encoded)).to eq tencoded
+      end
+    end
+
     context 'with unknown keys' do
       let(:source_with_unknown) { source.merge("unknown" => "unknown")}
       it 'ignores unknown keys' do
