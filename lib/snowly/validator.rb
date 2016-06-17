@@ -8,8 +8,8 @@ module Snowly
 
     attr_reader :request, :errors, :protocol_schema
 
-    def initialize(query_string)
-      @request = Request.new query_string
+    def initialize(request_payload)
+      @request_payload = request_payload
       @errors = []
       @protocol_schema = load_protocol_schema
     end
@@ -53,12 +53,12 @@ module Snowly
 
     # @return [Hash] all contexts content and schema definitions
     def associated_contexts
-      load_contexts request.as_hash['contexts']
+      load_contexts @request_payload['contexts']
     end
 
     # @return [Hash] all unstructured events content and schema definitions
     def associated_unstruct_event
-      load_unstruct_event request.as_hash['unstruct_event']
+      load_unstruct_event @request_payload['unstruct_event']
     end
 
     # @return [Array<Hash>] all associated content
@@ -110,7 +110,7 @@ module Snowly
 
     # Validates root attributes for the events table
     def validate_root
-      this_error = JSON::Validator.fully_validate protocol_schema, request.as_hash
+      this_error = JSON::Validator.fully_validate protocol_schema, @request_payload
       @errors += this_error if this_error.count > 0
     end
   end
