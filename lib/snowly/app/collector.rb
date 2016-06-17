@@ -23,10 +23,11 @@ module Snowly
 
       get '/i' do
         content_type :json
-        validator = Snowly::Validator.new request.query_string
+        request_payload = (Snowly::Request.new request.query_string).as_hash
+        validator = Snowly::Validator.new request_payload
         if validator.validate
           status 200
-          content = { content: validator.request.as_hash }.to_json
+          content = { content: request_payload }.to_json
           Snowly.logger.info content
           if params[:debug] || Snowly.debug_mode
             body(content)
@@ -36,7 +37,7 @@ module Snowly
           end
         else
           status 500
-          content = { errors: validator.errors, content: validator.request.as_hash }.to_json
+          content = { errors: validator.errors, content: request_payload }.to_json
           Snowly.logger.error content
           body (content)
         end
