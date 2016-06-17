@@ -50,9 +50,26 @@ module Snowly
         response.headers['Access-Control-Allow-Origin'] = env['HTTP_ORIGIN']
         request.body.rewind
         request_payload = JSON.parse request.body.read
-        # TODO validate the payload
-        content_type 'image/gif'
-        Snowly::App::Collector::GIF
+        errors = Hash.new
+        for event in request_payload['data'] do
+          event_data = Snowly::Transformer.transform event
+          puts "processing event: #{event_data['event_id']}"
+          validator = Snowly::Validator.new event_data
+          if not validator.validate
+            errors[event_data['event_id']] = validator.errors
+          end
+        end
+        
+        if errors.length > 0
+          status 500
+          content_type :json
+          body ({errors: errors, content: request_payload}.to_json)
+        else
+          status 200
+          content_type 'image/gif'
+          Snowly::App::Collector::GIF
+        end
+        
       end
 
       options '*' do
