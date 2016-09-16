@@ -32,7 +32,7 @@ class CustomDependenciesAttribute < JSON::Schema::Attribute
   def self.validate_dependency(schema, data, property, dependency_hash, fragments, processor, attribute, options)
     key, value = Array(dependency_hash).flatten
     return unless data[key.to_s] == value.to_s
-    return if data.has_key?(property.to_s)
+    return if data.has_key?(property.to_s) && not(data[property.to_s].blank?)
     message = "The property '#{build_fragment(fragments)}' did not contain a required property of '#{property}' when property '#{key}' is '#{value}'"
     validation_error(processor, message, fragments, schema, attribute, options[:record_errors])
   end
