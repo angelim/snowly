@@ -1,17 +1,15 @@
 # Performs the validation for the root attributes and associated contexts and unstructured events.
 require 'snowly/request'
+require 'snowly/protocol_schema_finder'
 require 'snowly/extensions/custom_dependencies'
 
 module Snowly
   class Validator
-    PROTOCOL_FILE_NAME = 'snowplow_protocol.json'
-
-    attr_reader :request, :errors, :protocol_schema
+    attr_reader :request, :errors
 
     def initialize(query_string)
       @request = Request.new query_string
       @errors = []
-      @protocol_schema = load_protocol_schema
     end
 
     # If request is valid
@@ -27,29 +25,11 @@ module Snowly
       valid?
     end
 
+    def protocol_schema
+      @protocol_schema ||= ProtocolSchemaFinder.new.schema
+    end
+
     private
-
-    def find_protocol_schema
-      if resolver && alternative_protocol_schema
-        alternative_protocol_schema
-      else
-        File.expand_path("../../schemas/#{PROTOCOL_FILE_NAME}", __FILE__)
-      end
-    end
-
-    def resolver
-      Snowly.development_iglu_resolver_path
-    end
-
-    def alternative_protocol_schema
-      Dir[File.join(resolver,"/**/*")].select{ |f| File.basename(f) == PROTOCOL_FILE_NAME }[0]
-    end
-
-    # Loads the protocol schema created to describe snowplow events table attributes
-    # @return [Hash] parsed schema
-    def load_protocol_schema
-      JSON.parse File.read(find_protocol_schema)
-    end
 
     # @return [Hash] all contexts content and schema definitions
     def associated_contexts

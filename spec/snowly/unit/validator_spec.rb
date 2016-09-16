@@ -15,6 +15,7 @@ describe Snowly::Validator do
   let(:ue_location)      { 'iglu:com.snowplowanalytics.snowplow/unstruct_event/jsonschema/1-0-0'}
   let(:context_content)  { File.read(File.expand_path('../../../fixtures/snowplow_context.json', __FILE__)) }
   let(:ue_content)       { File.read(File.expand_path('../../../fixtures/snowplow_ue.json', __FILE__)) }
+  let(:alternative_protocol_schema) { File.expand_path('../../../protocol_resolver/snowplow_protocol.json', __FILE__) }
 
   let(:validator) { Snowly::Validator.new to_query(hash) }
   let(:valid_root) do
@@ -144,10 +145,11 @@ describe Snowly::Validator do
       expect(validator.errors).to eq []
     end
     context 'and an alternative more restrictive protocol schema' do
+      let(:custom_schema) { Snowly::ProtocolSchemaFinder.new(alternative_protocol_schema).schema }
       before do
         allow_any_instance_of(Snowly::Validator)
-          .to receive(:alternative_protocol_schema)
-          .and_return(File.expand_path('../../../fixtures/snowly/alternative_protocol_schema.json', __FILE__))
+          .to receive(:protocol_schema)
+          .and_return(custom_schema)
       end
       it 'set errors' do
         validator.validate

@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "id": "snowplow_protocol.json",
-  "description": "Representation of Snowplow Protocol in JSON Schema format for validation",
+  "description": "Alternative Snowplow Protocol",
   "type": "object",
   "properties": {
     "name_tracker": {
