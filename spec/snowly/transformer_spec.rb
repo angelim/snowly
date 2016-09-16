@@ -78,7 +78,7 @@ describe Snowly::Transformer do
     source.merge('co' => { name:'co' }.to_json, "ue_pr" => { name:'ue_pr' }.to_json)
   end
   let(:encoded) do
-    source.merge('cx' => Base64.strict_encode64({ name:'cx' }.to_json), "ue_px" => Base64.strict_encode64({ name:'ue_px' }.to_json))
+    source.merge('cx' => Base64.encode64({ name:'cx' }.to_json), "ue_px" => Base64.encode64({ name:'ue_px' }.to_json))
   end
   let(:translated) do
     {
