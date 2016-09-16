@@ -6,15 +6,15 @@ describe Snowly::Validator do
   def to_query(hash)
     Rack::Utils.build_nested_query(hash)
   end
-  before { Snowly.development_iglu_resolver_path = File.expand_path("../../fixtures", __FILE__)+"/" }
+  before { Snowly.development_iglu_resolver_path = File.expand_path("../../../fixtures", __FILE__)+"/" }
   before { Snowly::SchemaCache.instance.reset_cache }
 
   let(:context_url)      { "http://iglucentral.com/schemas/com.snowplowanalytics.snowplow/contexts/jsonschema/1-0-0" }
   let(:ue_url)           { "http://iglucentral.com/schemas/com.snowplowanalytics.snowplow/unstruct_event/jsonschema/1-0-0" }
   let(:context_location) { 'iglu:com.snowplowanalytics.snowplow/contexts/jsonschema/1-0-0'}
   let(:ue_location)      { 'iglu:com.snowplowanalytics.snowplow/unstruct_event/jsonschema/1-0-0'}
-  let(:context_content)  { File.read(File.expand_path('../../fixtures/snowplow_context.json', __FILE__)) }
-  let(:ue_content)       { File.read(File.expand_path('../../fixtures/snowplow_ue.json', __FILE__)) }
+  let(:context_content)  { File.read(File.expand_path('../../../fixtures/snowplow_context.json', __FILE__)) }
+  let(:ue_content)       { File.read(File.expand_path('../../../fixtures/snowplow_ue.json', __FILE__)) }
 
   let(:validator) { Snowly::Validator.new to_query(hash) }
   let(:valid_root) do
@@ -147,7 +147,7 @@ describe Snowly::Validator do
       before do
         allow_any_instance_of(Snowly::Validator)
           .to receive(:alternative_protocol_schema)
-          .and_return(File.expand_path('../../fixtures/snowly/alternative_protocol_schema.json', __FILE__))
+          .and_return(File.expand_path('../../../fixtures/snowly/alternative_protocol_schema.json', __FILE__))
       end
       it 'set errors' do
         validator.validate

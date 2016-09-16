@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe Snowly::SchemaCache do
-  before { Snowly.development_iglu_resolver_path = File.expand_path("../../fixtures", __FILE__)+"/" }
+  before { Snowly.development_iglu_resolver_path = File.expand_path("../../../fixtures", __FILE__)+"/" }
   before { Snowly::SchemaCache.instance.reset_cache }
   it 'is singleton' do
     expect(Snowly::SchemaCache.instance).to eq Snowly::SchemaCache.instance    
   end
-  let(:file_content) { File.read(File.expand_path('../../fixtures/snowly/context_test_0/jsonschema/1-0-0', __FILE__)) }
+  let(:file_content) { File.read(File.expand_path('../../../fixtures/snowly/context_test_0/jsonschema/1-0-0', __FILE__)) }
   
   context 'with snowplow schema' do
     let(:url)           { "http://iglucentral.com/schemas/com.snowplowanalytics.snowplow/contexts/jsonschema/1-0-0" }
