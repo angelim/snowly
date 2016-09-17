@@ -7,8 +7,8 @@ module Snowly
   class Validator
     attr_reader :request, :errors
 
-    def initialize(query_string)
-      @request = Request.new query_string
+    def initialize(payload)
+      @request = Request.new payload
       @errors = []
     end
 

@@ -60,4 +60,25 @@ describe "Collector" do
       end
     end
   end
+  describe 'POST /com.snowplowanalytics.snowplow/tp2' do
+    let(:url) { '/com.snowplowanalytics.snowplow/tp2' }
+    context 'with a valid request' do
+      let(:valid_params) { {"data" => [{ "e"=>"pv", "page"=>"Root README", "url"=>"http://github.com/snowplow/snowplow", "aid"=>"snowplow", "p"=>"web", "tv"=>"no-js-0.1.0", "ua"=>"firefox", "eid"=>"u2i3" }] } }
+      it 'responds with 200' do
+        post url, JSON.dump(valid_params)
+        expect(last_response).to be_ok
+      end
+    end
+    context 'with an invalid request' do
+      let(:invalid_params) { { "data" => [{ "e"=>"pv", "page"=>"Root README", "url"=>"http://github.com/snowplow/snowplow", "aid"=>"snowplow", "p"=>"web", "tv"=>"no-js-0.1.0" }] } }
+      it 'responds with 500' do
+        post url, invalid_params
+        expect(last_response).not_to be_ok
+      end
+      it 'renders errors' do
+        post url, JSON.dump(invalid_params)
+        expect(last_response.body).to include("errors")
+      end
+    end
+  end
 end

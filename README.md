@@ -16,7 +16,7 @@ Snowplow has an excellent toolset, but the first implementation stages can be ha
 
 ### Features
 
-With Snowly you can use [Json Schemas](http://spacetelescope.github.io/understanding-json-schema/) to define more expressive event requirements. Aside from assuring that you're fully compatible with the snowplow protocol, you can go even further and extend it with a set of more specific rules.
+With Snowly you can use [Json Schemas](http://spacetelescope.github.io/understanding-json-schema/) to define more expressive event requirements. Aside from assuring that you're fully compatible with the snowplow protocol, you can go even further and extend it with a set of more specific rules. Snowly emulates both cloudfront and closure collectors and will handle its differences automatically.
 
 Use cases:
 
@@ -84,7 +84,7 @@ Other options:
 
 ### Output
 
-When Snowly finds something wrong, it renders the parsed request along with its errors.
+When Snowly finds something wrong, it renders a parsed array of requests along with its errors.
 
 If everything is ok, Snowly delivers the default Snowplow pixel, unless you're using the debug mode. In debug mode it always renders the parsed contents of your requests.
 
@@ -92,24 +92,29 @@ If you can't investigate the request's response, you can start Snowly in the for
 `snowly -d -F`
 
 Example: 
-`http://0.0.0.0:5678/i?&e=pv&page=Root%20README&url=http%3A%2F%2Fgithub.com%2Fsnowplow%2Fsnowplow&aid=snowplow&p=i&tv=no-js-0.1.0`
+`http://0.0.0.0:5678/i?&e=pv&page=Root%20README&url=http%3A%2F%2Fgithub.com%2Fsnowplow%2Fsnowplow&aid=snowplow&p=i&tv=no-js-0.1.0&eid=ev-id-1`
 ```json
-{
-  "errors": [
-    "The property '#/platform' value \"i\" did not match one of the following values: web, mob, pc, srv, tv, cnsl, iot in schema snowplow_protocol.json",
-    "The property '#/' did not contain a required property of 'event_id' in schema snowplow_protocol.json",
-    "The property '#/' did not contain a required property of 'useragent' in schema snowplow_protocol.json"
-  ],
-  "content": {
-    "event": "pv",
-    "page_title": "Root README",
-    "page_url": "http://github.com/snowplow/snowplow",
-    "app_id": "snowplow",
-    "platform": "i",
-    "v_tracker": "no-js-0.1.0"
+[
+  {
+    "event_id": "ev-id-1",
+    "errors": [
+      "The property '#/platform' value \"i\" did not match one of the following values: web, mob, pc, srv, tv, cnsl, iot in schema snowplow_protocol.json",
+      "The property '#/' did not contain a required property of 'useragent' in schema snowplow_protocol.json"
+    ],
+    "content": {
+      "event": "pv",
+      "page_title": "Root README",
+      "page_url": "http://github.com/snowplow/snowplow",
+      "app_id": "snowplow",
+      "platform": "i",
+      "v_tracker": "no-js-0.1.0",
+      "event_id": "ev-id-1"
+    }
   }
-}
+]
 ```
+
+If you're using the closure collector and can't see your requests firing up right away, try [manually flushing](https://github.com/snowplow/snowplow/wiki/Ruby-Tracker#54-manual-flushing) or change your emitter's buffer_size(number of events before flusing) to a lower value.
 
 ## JSON Schemas
 
