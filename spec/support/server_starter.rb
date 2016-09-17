@@ -27,6 +27,7 @@ class TestServer
   end
 
   def start_sinatra_server
+    Snowly.development_iglu_resolver_path = File.expand_path("../../fixtures", __FILE__)+"/"
     WebMock.allow_net_connect!
     unless sinatra_running?
       pid = fork do

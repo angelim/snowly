@@ -10,9 +10,16 @@ require 'pry'
 require 'webmock/rspec'
 require 'rack/test'
 
+Dir[File.join(Dir.pwd,"spec/support/**/*.rb")].each {|f| require f}
+WebMock.allow_net_connect!
+TestServer.new.start_sinatra_server
+
 module RSpecMixin
   include Rack::Test::Methods
   def app() Snowly::App::Collector end
 end
 
-RSpec.configure { |c| c.include RSpecMixin }
+RSpec.configure do |config|
+  config.include RSpecMixin
+  config.extend EventAssignments
+end
