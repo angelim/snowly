@@ -34,7 +34,6 @@ module Snowly
       end
 
       get '/' do
-        @url = request.url.gsub(/(http|https)\:\/\//,'')[0..-2]
         @resolved_schemas = if resolver = Snowly.development_iglu_resolver_path
           Dir[File.join(resolver,"/**/*")].select{ |e| File.file? e }
         else

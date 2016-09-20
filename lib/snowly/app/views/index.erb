@@ -22,7 +22,7 @@
       <p><strong>Snowly</strong> is a minimal collector implementation intended to validate your event tracking requests before emitting them to cloudfront or a closure collector.</p>
       <p>When <strong>Snowly</strong> finds something wrong, it renders the parsed request along with its errors.</p>
       <p>If everything is ok, Snowly delivers the default Snowplow pixel, unless you're using the debug mode.</p>
-      <p>Point your collector URL to <code><%= url %></code> and have fun!</p>
+      <p>Point your collector URL to <code><%= request.env['HTTP_HOST'] %></code> and have fun!</p>
       <p>
         <a class="btn btn-lg btn-success" href="/i?&e=pv&page=Root%20README&url=http%3A%2F%2Fgithub.com%2Fsnowplow%2Fsnowplow&aid=snowplow&p=web&tv=no-js-0.1.0&ua=firefox&&eid=u2i3&debug=true" role="button">See it working!</a>
         <a class="btn btn-lg btn-warning" href="/i?&e=pv&page=Root%20README&url=http%3A%2F%2Fgithub.com%2Fsnowplow%2Fsnowplow&aid=snowplow&p=i&tv=no-js-0.1.0&eid=u2i3&debug=true" role="button">Event with errors!</a>
