@@ -1,3 +1,4 @@
+require 'thin'
 require 'erb'
 require 'base64'
 require 'sinatra'
@@ -6,6 +7,7 @@ require 'sinatra/reloader' if development?
 module Snowly
   module App
     class Collector < Sinatra::Base
+      set :server, 'thin'
       GIF = Base64.decode64('R0lGODlhAQABAPAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==')
       configure :development do
         register Sinatra::Reloader
