@@ -35,7 +35,7 @@ module Snowly
       "f_ag" => { field: "br_features_silverlight", type: "string" },
       "cookie" => { field: "br_cookies", type: "string" },
       "res" => { field: "screen_res_width_x_height", type: "string" },
-      "cd" => { field: "br_colordepth", type: "string" },
+      "cd" => { field: "br_colordepth", type: "integer" },
       "tz" => { field: "os_timezone", type: "string" },
       "refr" => { field: "page_referrer", type: "string" },
       "url" => { field: "page_url", type: "string" },
