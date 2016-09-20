@@ -26,7 +26,7 @@ module Snowly
             Snowly::App::Collector::GIF
           end
         else
-          status 500
+          status 422
           content = validator.as_hash
           Snowly.logger.error content
           body (content.to_json)
