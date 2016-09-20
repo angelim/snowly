@@ -5,8 +5,8 @@ require 'rack'
 require 'json-schema'
 require 'snowly/validators/self_desc'
 require "snowly/version"
+require 'snowly/each_validator'
 require 'snowly/validator'
-require 'snowly/multi_validator'
 require 'snowly/schema_cache'
 
 module Snowly

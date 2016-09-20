@@ -47,8 +47,22 @@ describe "Collector" do
         get valid_request
         expect(last_response).to be_ok
       end
+      context 'when in production mode' do
+        it 'responds with image content type' do
+          get valid_request
+          expect(last_response.content_type).to eq 'image/gif'
+        end
+      end
+      context 'when in debug mode' do
+        before { Snowly.debug_mode = true }
+        it 'responds with json content type' do
+          get valid_request
+          expect(last_response.content_type).to eq 'application/json'
+        end
+      end
     end
     context 'with an invalid request' do
+      before { Snowly.debug_mode = false }
       let(:invalid_request) { '/i?&e=pv&page=Root%20README&url=http%3A%2F%2Fgithub.com%2Fsnowplow%2Fsnowplow&aid=snowplow&p=i&tv=no-js-0.1.0' }
       it 'responds with 500' do
         get invalid_request
@@ -57,6 +71,10 @@ describe "Collector" do
       it 'renders errors' do
         get invalid_request
         expect(last_response.body).to include("errors")
+      end
+      it 'always responds with json content type' do
+        get invalid_request
+        expect(last_response.content_type).to eq 'application/json'
       end
     end
   end

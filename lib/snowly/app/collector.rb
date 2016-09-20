@@ -11,34 +11,23 @@ module Snowly
         register Sinatra::Reloader
       end
 
-      def extract_content(validator)
-        multi = validator.respond_to?(:validators)
-        @content ||= if multi
-          validator.validators.each_with_object([]) do |item, memo|
-            item_request = item.request.as_hash
-            memo << { event_id: item_request['event_id'], errors: item.errors, content: item_request }
-          end
-        else
-          [{ event_id: validator.request.as_hash['event_id'], errors: validator.errors, content: validator.request.as_hash }]
-        end.to_json
-      end
-
       def handle_response(validator)
+        content_type :json
         if validator.validate
           status 200
           if params[:debug] || Snowly.debug_mode
-            content = extract_content validator
+            content = validator.as_hash
             Snowly.logger.info content
-            body(content)
+            body(content.to_json)
           else
             content_type 'image/gif'
             Snowly::App::Collector::GIF
           end
         else
           status 500
-          content = extract_content validator
+          content = validator.as_hash
           Snowly.logger.error content
-          body (content)
+          body (content.to_json)
         end
       end
 
@@ -53,7 +42,6 @@ module Snowly
       end
 
       get '/i' do
-        content_type :json
         validator = Snowly::Validator.new request.query_string
         handle_response(validator)
       end
@@ -64,7 +52,7 @@ module Snowly
         response.headers['Access-Control-Allow-Credentials'] = 'true'
         response.headers['Access-Control-Allow-Origin'] = env['HTTP_ORIGIN'] || '*'
         payload = JSON.parse request.body.read
-        validator = Snowly::MultiValidator.new payload
+        validator = Snowly::Validator.new payload, batch: true
         handle_response(validator)
       end
 
