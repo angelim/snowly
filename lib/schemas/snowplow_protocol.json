@@ -249,7 +249,7 @@
       "type": "number"
     }
   },
-  "required": ["app_id", "platform", "event", "event_id", "v_tracker", "useragent"],
+  "required": ["app_id", "platform", "event", "event_id", "v_tracker"],
   "custom_dependencies": {
     "se_category": { "event": "se" },
     "se_action": {"event": "se" },
