@@ -58,14 +58,20 @@ module Snowly
       unless hash['data']
         @errors << "All custom contexts must be contain a `data` element" and return
       end
-      response << { content: hash['data'], definition: SchemaCache.instance[hash['schema']] }
+      schema = SchemaCache.instance[hash['schema']]
+      response << { content: hash['data'], definition: schema, schema_name: hash['schema'] }
       unless hash['data'].is_a? Array
         @errors << "All custom contexts must be wrapped in an Array" and return
       end
       hash['data'].each do |data_item|
-        response << { content: data_item['data'], definition: SchemaCache.instance[data_item['schema']] }
+        schema = SchemaCache.instance[data_item['schema']]
+        response << { content: data_item['data'], definition: schema, schema_name: data_item['schema'] }
       end
       response
+    end
+
+    def register_missing_schema(name)
+      @errors << "#{ name } wasn't found in any resolvers."
     end
 
     # Performs initial validation for associated unstructured events and loads their contents and definitions.
@@ -78,16 +84,18 @@ module Snowly
       end
       outer_data = hash['data']
       inner_data = outer_data['data']
-      response << { content: outer_data, definition: SchemaCache.instance[hash['schema']] }
-      response << { content: inner_data, definition: SchemaCache.instance[outer_data['schema']] }
+      response << { content: outer_data, definition: SchemaCache.instance[hash['schema']], schema_name: hash['schema'] }
+      response << { content: inner_data, definition: SchemaCache.instance[outer_data['schema']], schema_name: outer_data['schema'] }
       response
     end
 
     # Validates associated contexts and unstructured events
     def validate_associated
       return unless associated_elements
-       associated_elements.each do |schema|
-        this_error = JSON::Validator.fully_validate JSON.parse(schema[:definition]), schema[:content]
+      missing_schemas, valid_elements = associated_elements.partition{ |el| el[:definition].blank? }
+      missing_schemas.each { |element| register_missing_schema(element[:schema_name]) }
+      valid_elements.each do |element|
+        this_error = JSON::Validator.fully_validate JSON.parse(element[:definition]), element[:content]
         @errors += this_error if this_error.count > 0
       end
     end
