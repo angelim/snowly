@@ -2,7 +2,7 @@
 
 Debug your Snowplow implementation locally, without resorting to Snowplow's ETL tasks. It's like Facebook's URL Linter, but for Snowplow.
 
-Snowly is a minimal [Collector](https://github.com/snowplow/snowplow/wiki/Setting-up-a-collector) implementation intended to run on your  development environment. It comes with a comprehensive validation engine, that will point out any schema requirement violations. You can easily validate your event requests before having to emmit them to a cloudfront, closure or scala collector.
+Snowly is a minimal [Collector](https://github.com/snowplow/snowplow/wiki/Setting-up-a-collector) implementation intended to run on your  development environment. It comes with a comprehensive validation engine, that will point out any schema requirement violations. You can easily validate your event requests before having to emit them to a cloudfront, closure or scala collector.
 
 ### Motivation
 
@@ -22,7 +22,7 @@ Use cases:
 
 - Validate custom contexts or unstructured event types and required fields.
 - Restrict values for any field, like using a custom dictionary for the structured event action field.
-- Define requirements based on the content of another field: If __event action__ is 'viewed_product', __event property__ is required.
+- Define requirements based on the content of another field: If __event action__ is 'viewed_product', then __event property__ is required.
 
 ## Installation
 
@@ -86,9 +86,9 @@ Other options:
 
 When Snowly finds something wrong, it renders a parsed array of requests along with its errors.
 
-If everything is ok, Snowly delivers the default Snowplow pixel, unless you're using the debug mode. In debug mode it always renders the parsed contents of your requests.
+When everything is ok, Snowly delivers the default Snowplow pixel, unless you're using the debug mode.
 
-If you can't investigate the request's response, you can start Snowly in the foreground and in Debug Mode to output the response to STDOUT.
+If you can't investigate the request's response, you can start Snowly in the foreground and in __Debug Mode__ to output the response to __STDOUT__.
 `snowly -d -F`
 
 Example: 
@@ -115,6 +115,8 @@ Example:
 ```
 
 If you're using the closure collector and can't see your requests firing up right away, try [manually flushing](https://github.com/snowplow/snowplow/wiki/Ruby-Tracker#54-manual-flushing) or change your emitter's buffer_size(number of events before flusing) to a lower value.
+
+In debug mode Snowly always renders the parsed contents of your requests. If you're using the javascript tracker, use the __post__ option to be able to read the response in your browser inspector. The js tracker implementation for __get__ requests works by changing an image src, so the inspector hides the response.
 
 ## JSON Schemas
 
