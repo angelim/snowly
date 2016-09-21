@@ -1,5 +1,7 @@
 # Snowly - Snowplow Request Validator
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://github.com/angelim/snowly-heroku)
+
 Debug your Snowplow implementation locally, without resorting to Snowplow's ETL tasks. It's like Facebook's URL Linter, but for Snowplow.
 
 Snowly is a minimal [Collector](https://github.com/snowplow/snowplow/wiki/Setting-up-a-collector) implementation intended to run on your  development environment. It comes with a comprehensive validation engine, that will point out any schema requirement violations. You can easily validate your event requests before having to emit them to a cloudfront, closure or scala collector.
