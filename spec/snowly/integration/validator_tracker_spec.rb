@@ -41,11 +41,11 @@ describe 'Tracker Validation' do
         end
       end
       context 'when one is invalid' do
-        it 'returns 500' do
+        it 'returns 422' do
           tracker.track_struct_event(*valid_se.values)
           tracker.track_struct_event(*invalid_se.values)
           tracker.flush
-          expect(response.code).to eq '500'
+          expect(response.code).to eq '422'
         end
         it 'returns errors' do
           tracker.track_struct_event(*valid_se.values)
@@ -83,10 +83,10 @@ describe 'Tracker Validation' do
 
         context 'with invalid structured event' do
           let(:translated_se) { Snowly::Transformer.transform(invalid_se) }
-          it 'returns 500 for invalid structured event request' do
+          it 'returns 422 for invalid structured event request' do
             tracker.track_struct_event(*invalid_se.values)
             tracker.flush
-            expect(response.code).to eq '500'
+            expect(response.code).to eq '422'
           end
           it 'returns errors' do
             tracker.track_struct_event(*invalid_se.values)
