@@ -47,6 +47,10 @@ module Snowly
         handle_response(validator)
       end
 
+      get '/js' do
+        erb :js
+      end
+
       post '/com.snowplowanalytics.snowplow/tp2' do
         response.headers['Allow'] = 'HEAD,GET,PUT,POST,DELETE,OPTIONS'
         response.headers['Access-Control-Allow-Headers'] = 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Cache-Control, Accept'
