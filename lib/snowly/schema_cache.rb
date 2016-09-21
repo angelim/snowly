@@ -26,13 +26,6 @@ module Snowly
 
     private
 
-    # If schema should be resolved to snowplow iglu server
-    # @param location [String]
-    # @return [true, false]
-    def from_snowplow?(location)
-      location['iglu:com.snowplowanalytics.snowplow']
-    end
-
     def external?(location)
       location.match(/^(http|https):\/\//)
     end
@@ -42,25 +35,29 @@ module Snowly
     # @param resolver [String] local or remote path to look for the schema
     # @return [String] Schema's actual location
     def resolve(location, resolver)
-      location.sub(/^iglu\:/, resolver)
-    end
-
-    def resolved_path(location)
-      if from_snowplow?(location)
-        resolve(location, SNOWPLOW_IGLU_RESOLVER)
-      else
-        resolve(location, Snowly.development_iglu_resolver_path)
-      end
+      path = location.sub(/^iglu\:/, '')
+      File.join resolver, path
     end
 
     # Caches the schema content under its original location name
     # @param location [String]
     # @return [String] schema content
     def save_in_cache(location)
-      full_path = resolved_path(location)
-      content = external?(full_path) ? Net::HTTP.get(URI(full_path)) : File.read(full_path)
+      content = begin
+        full_path = resolve(location, (Snowly.development_iglu_resolver_path || SNOWPLOW_IGLU_RESOLVER) )
+        external?(full_path) ? Net::HTTP.get(URI(full_path)) : File.read(full_path)
+      rescue
+        Snowly.logger.warn "Could't locate #{location} in development resolver. Attemping IgluCentral Server..."
+        full_path = resolve(location, SNOWPLOW_IGLU_RESOLVER)
+        begin
+          result = Net::HTTP.get(URI(full_path))
+          JSON.load(result) && result
+        rescue
+          Snowly.logger.error "#{location} schema is not available in any resolver"
+          return nil
+        end
+      end
       @@schema_cache[location] = content
     end
-
   end
 end
