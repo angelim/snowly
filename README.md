@@ -6,7 +6,7 @@ Snowly is a minimal [Collector](https://github.com/snowplow/snowplow/wiki/Settin
 
 ### Motivation
 
-Snowplow has an excellent toolset, but the first implementation stages can be hard. To run Snowplow properly you have to set up a lot of external dependencies like AWS permissions, Cloudfront distributions and EMR jobs. If you're tweaking the snowplow model to fit your needs or using trackers that don't enforce every requirement, you'll find yourself waiting for the ETL jobs to run in order to validate every implementation change. __[update] This has changed a quite a bit with Snowplow Mini's release. It's a lot easier to get started, but Snowly is still valuable as a first step and debug tool.__
+Snowplow has an excellent toolset, but the first implementation stages can be hard. To run Snowplow properly you have to set up a lot of external dependencies like AWS permissions, Cloudfront distributions and EMR jobs. If you're tweaking the snowplow model to fit your needs or using trackers that don't enforce every requirement, you'll find yourself waiting for the ETL jobs to run in order to validate every implementation change.
 
 ### Who will get the most from Snowly
 
@@ -63,24 +63,7 @@ touch ~/schemas/com.my_company/viewed_product/jsonschema/1-0-0
 
 ## Usage
 
-Just use `snowly` to start and `snowly -K` to stop. Where allowed, a browser window will open showing the collector's address.
-
-Other options:
-
-    -K, --kill               kill the running process and exit
-    -S, --status             display the current running PID and URL then quit
-    -s, --server SERVER      serve using SERVER (thin/mongrel/webrick)
-    -o, --host HOST          listen on HOST (default: 0.0.0.0)
-    -p, --port PORT          use PORT (default: 5678)
-    -x, --no-proxy           ignore env proxy settings (e.g. http_proxy)
-    -e, --env ENVIRONMENT    use ENVIRONMENT for defaults (default: development)
-    -F, --foreground         don't daemonize, run in the foreground
-    -L, --no-launch          don't launch the browser
-    -d, --debug              raise the log level to :debug (default: :info)
-        --app-dir APP_DIR    set the app dir where files are stored (default: ~/.vegas/collector)/)
-    -P, --pid-file PID_FILE  set the path to the pid file (default: app_dir/collector.pid)
-        --log-file LOG_FILE  set the path to the log file (default: app_dir/collector.log)
-        --url-file URL_FILE  set the path to the URL file (default: app_dir/collector.url)
+Just use `snowly` to start and `snowly -K` to stop. Where allowed, a browser window will open showing the collector's address. Use `snowly --help` for other options.
 
 ### Output
 
